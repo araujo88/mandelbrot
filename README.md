@@ -1,2 +1,6 @@
+<img src="mandelbrot.jpg"/>
+
 # mandelbrot
-A simple Mandelbrot set generator written in C++
+A simple Mandelbrot fractal image generator written in C++
+
+
