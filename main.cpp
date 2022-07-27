@@ -2,30 +2,19 @@
 #include "Complex/complex.hpp"
 #include "EasyBMP/EasyBMP.hpp"
 
-int min(int a, int b)
-{
-    return a < b ? a : b;
-}
-
 double scale(double val, double vmax, double vmin)
 {
     return (val - vmin) / (vmax - vmin);
 }
 
-double fabs(double val)
-{
-    return val < 0 ? -val : val;
-}
-
 int main(int argc, char *argv[])
 {
     unsigned int it;
-    const unsigned int max_it = 300;
-    double tol = 1e-3;
+    const unsigned int max_it = 100;
     double diff;
-    unsigned int resx = 1000;
-    unsigned int resy = 1000;
-    double x_max = 0.47, x_min = -2.00, y_max = 1.12, y_min = -1.12;
+    unsigned int resx = 8000;
+    unsigned int resy = 8000;
+    double x_max = 1, x_min = -2, y_max = 1.5, y_min = -1.5;
     double x0;
     double y0;
     double intensity;
@@ -33,6 +22,8 @@ int main(int argc, char *argv[])
     int color_g;
     int color_b;
     Complex z_temp;
+
+    std::cout << "Initiating program..." << std::endl;
 
     // R, G, B [0, 255]
     EasyBMP::RGBColor black(0, 0, 0);
@@ -56,15 +47,13 @@ int main(int argc, char *argv[])
                 z = z * z + c;
                 it++;
                 diff = (z - z_temp).abs();
-                // std::cout << "diff: " << diff << std::endl;
-            } while ((diff > tol) && (it < max_it));
+            } while ((isnanl(diff) == 0) && (it < max_it));
 
-            std::cout << "Iterations " << it << std::endl;
+            intensity = 1 - (double)(it) / (double)max_it;
 
-            intensity = (double)it / (double)max_it;
-            color_r = int(255. * intensity / 2);
-            color_g = int(255. * intensity);
-            color_b = int(255. * 3 * intensity);
+            color_r = int(520 / intensity);
+            color_g = int(230 / intensity);
+            color_b = int(310 / intensity);
 
             // PositionX, PisitionY, Color
             img.SetPixel(x, y, EasyBMP::RGBColor(color_r, color_g, color_b));
@@ -72,6 +61,8 @@ int main(int argc, char *argv[])
     }
 
     img.Write();
+
+    std::cout << "Image generated!" << std::endl;
 
     return 0;
 }
