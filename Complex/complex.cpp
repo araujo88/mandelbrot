@@ -1,4 +1,6 @@
 #include "complex.hpp"
+#include <sstream> // for ostringstream
+#include <string>
 
 template <typename T>
 int sgn(T val)
